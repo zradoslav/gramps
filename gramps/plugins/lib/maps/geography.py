@@ -159,7 +159,6 @@ class GeoGraphyView(OsmGps, NavigationView):
         self.places_found = []
         self.select_fct = None
         self.geo_mainmap = None
-        self.reloadtiles = None
         theme = Gtk.IconTheme.get_default()
         self.geo_mainmap = theme.load_surface('gramps-geo-mainmap', 48, 1,
                                               None, 0)
@@ -184,8 +183,6 @@ class GeoGraphyView(OsmGps, NavigationView):
         self.menu = None
         self.mark = None
         self.path_entry = None
-        self.changemap = None
-        self.clearmap = None
         self.nbplaces = 0
         self.nbmarkers = 0
         self.place_without_coordinates = []
@@ -397,8 +394,7 @@ class GeoGraphyView(OsmGps, NavigationView):
         add_item = Gtk.MenuItem(label=title)
         menu.append(add_item)
 
-        self.changemap = Gtk.Menu()
-        changemap = self.changemap
+        changemap = Gtk.Menu()
         add_item.set_submenu(changemap)
         # show in the map menu all available providers
         for my_map in constants.MAP_TYPE:
@@ -409,16 +405,14 @@ class GeoGraphyView(OsmGps, NavigationView):
 
         reload_text = _("Reload all visible tiles for '%(map)s'.") % {
             'map' : map_name}
-        self.reloadtiles = Gtk.MenuItem(label=reload_text)
-        reloadtiles = self.reloadtiles
+        reloadtiles = Gtk.MenuItem(label=reload_text)
         reloadtiles.connect("activate", self.reload_visible_tiles)
 
         menu.append(reloadtiles)
 
         clear_text = _("Clear the '%(map)s' tiles cache.") % {
             'map' : map_name}
-        self.clearmap = Gtk.MenuItem(label=clear_text)
-        clearmap = self.clearmap
+        clearmap = Gtk.MenuItem(label=clear_text)
         clearmap.connect("activate", self.clear_map,
                          constants.TILES_PATH[config.get(
                              "geography.map_service")])
